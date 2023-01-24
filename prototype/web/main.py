@@ -46,6 +46,8 @@ def magic(tab):
 
     st.dataframe(dataframe, width=1200, height=500)
 
+
+
 def ous(tab):
     st.title("Conocé")
     st.write('La opción seleccionada  {}'.format(tab))
