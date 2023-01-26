@@ -13,10 +13,40 @@ class View(object):
         self.icons.append(icon_name)
 
     def render(self):
-        st.header("Aplicación en progreso (aquí va el header).")
+        # st.header("(aquí va el header).")
+        # st.image('./img/head.png')
+
+        import base64
+
+        LOGO_IMAGE = "./img/logo.png"
+
+        st.markdown(
+            """
+            <style>
+            .logo-text {
+                display: flex;
+                margin-top: -80px !important;
+            }
+            .logo-img {
+                float:right;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
+        st.markdown(
+            f"""
+            <div class="logo-text">
+                <img class="logo-img" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
         st.markdown('<style>' + open('./css/style.css').read() + '</style>', unsafe_allow_html=True)
         with st.sidebar:
-            # st.image('./img/logo.png', width=100)
+            # st.image('./img/luzIA.png', width=100)
             tab = on_hover_tabs(tabName=list(self.tabs),
                                      iconName=self.icons, default_choice=0)
 

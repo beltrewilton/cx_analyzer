@@ -4,6 +4,7 @@ from pysentimiento import create_analyzer
 
 @st.experimental_singleton
 def models():
+    print('####### Init pre-trained models #########')
     sentiment_analyzer = create_analyzer(task="sentiment", lang="es")
     emotion_analyzer = create_analyzer(task="emotion", lang="es")
     hate_speech_analyzer = create_analyzer(task="hate_speech", lang="es")
