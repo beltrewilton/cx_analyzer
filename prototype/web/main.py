@@ -36,6 +36,30 @@ def magic(tab):
     )
     # st.write('La opción seleccionada  {}'.format(tab))
 
+    def render_bar_sentiment(key=1, pos=1, neg=1, neu=1):
+        options = {
+            "xAxis": {
+                "type": "category",
+                "data": ["Positivo", "Negativo", "Neutro"],
+            },
+            "yAxis": {"type": "value"},
+            "series": [
+                {
+                    "data": [
+                        {"value": pos, "itemStyle": {"color": "#14e07e"}},
+                        {"value": neg, "itemStyle": {"color": "#e01499"}},
+                        {"value": neu, "itemStyle": {"color": "#d6cc6d"}},
+                    ],
+                    "type": "bar",
+                }
+            ],
+        }
+        st_echarts(
+            options=options,
+            height="400px",
+            key=key
+        )
+
     def render_pie_sentiment(key=1, title='Title', pos=0.33, neu=0.33, neg=0.33):
         options = {
             "title": {"text": f"{title}",  "left": "center"},
@@ -61,7 +85,7 @@ def magic(tab):
             ],
         }
         st_echarts(
-            options=options, height="600px", key=key
+            options=options, height="400px", key=key
         )
 
     def render_pie_emotion(key=1, title='Title', joy=1/7, sadness=1/7, anger=1/7, surprise=1/7, disgust=1/7, fear=1/7, others=1/7 ):
@@ -80,7 +104,7 @@ def magic(tab):
                             {"value": surprise, "name": "Sorpresa", "itemStyle": {"color": "#b10be3"}},
                             {"value": disgust, "name": "Disgusto", "itemStyle": {"color": "#cd0be3"}},
                             {"value": fear, "name": "Miedo", "itemStyle": {"color": "#e30bd1"}},
-                            {"value": others, "name": "others", "itemStyle": {"color": "#9ea8a8"}},
+                            # {"value": others, "name": "others", "itemStyle": {"color": "#9ea8a8"}},
                         ],
                     "emphasis": {
                         "itemStyle": {
@@ -93,7 +117,7 @@ def magic(tab):
             ],
         }
         st_echarts(
-            options=options, height="600px", key=key
+            options=options, height="400px", key=key
         )
 
     def render_pie_hate(key=1, title='Title', hateful=0.33, targeted=0.33, aggressive=0.33):
@@ -121,7 +145,7 @@ def magic(tab):
             ],
         }
         st_echarts(
-            options=options, height="600px", key=key
+            options=options, height="400px", key=key
         )
 
     uploaded_file = st.file_uploader("Cargá archivo", type={"csv"})
@@ -147,15 +171,16 @@ def magic(tab):
                 ### Extracting Sentiment and Emotionals features
                 df_feaured = se.extract(df=df_feaured, text_field=text_field, sample=500)
                 df_sent_mean = pd.DataFrame(df_feaured[se.extra_fields].mean(axis=0)).T
+                df_sent_sum = pd.DataFrame(df_feaured[se.extra_fields].sum(axis=0)).T
 
                 df_feaured.fillna(0, inplace=True)
 
             kol1, kol2, kol3 = st.columns(3)
             with kol1:
-                pos = df_sent_mean['sent_pos'].values[0]
-                neu = df_sent_mean['sent_neutral'].values[0]
-                neg = df_sent_mean['sent_neg'].values[0]
-                render_pie_sentiment(key=1, title='Sentimientos', pos=pos, neu=neu, neg=neg)
+                pos = df_sent_sum['sent_pos'].values[0]
+                neu = df_sent_sum['sent_neutral'].values[0]
+                neg = df_sent_sum['sent_neg'].values[0]
+                render_bar_sentiment(key=1, pos=pos, neu=neu, neg=neg)
             with kol2:
                 joy = df_sent_mean['joy'].values[0]
                 sadness = df_sent_mean['sadness'].values[0]

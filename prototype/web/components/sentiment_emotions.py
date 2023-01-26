@@ -12,8 +12,9 @@ class SentimentEmotion(object):
           self.ner_analyzer, self.pos_tagger = models()
 
      def __extract_sentiment(self, text):
+          threshold = 0.4
           probas = self.sentiment_analyzer.predict(text).probas
-          return probas['NEG'], probas['NEU'], probas['POS']
+          return (1 if probas['NEG'] >= threshold else 0) , (1 if probas['NEU'] >= threshold else 0) , (1 if probas['POS'] >= threshold else 0)
 
      def __extract_emotion(self, text):
           probas = self.emotion_analyzer.predict(text).probas
